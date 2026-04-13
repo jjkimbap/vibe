@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>제휴 문의</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #f6f7fb;
+        color: #111827;
+      }
+      .container {
+        min-height: 100vh;
+        display: grid;
+        place-items: start center;
+        padding: 16px;
+      }
+      .card {
+        width: 100%;
+        max-width: 560px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 8px 24px rgba(17, 24, 39, 0.06);
+      }
+      .card + .card {
+        margin-top: 16px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 24px;
+      }
+      p {
+        margin: 0 0 20px;
+        color: #4b5563;
+      }
+      .field {
+        margin-bottom: 14px;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 14px;
+      }
+      textarea {
+        min-height: 140px;
+        resize: vertical;
+      }
+      button {
+        width: 100%;
+        border: none;
+        background: #111827;
+        color: #ffffff;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      button:hover {
+        opacity: 0.92;
+      }
+      .hint {
+        margin-top: 10px;
+        font-size: 12px;
+        color: #6b7280;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <section class="card">
+        <h1>제휴 문의</h1>
+        <p>아래 내용을 작성해 주시면 확인 후 연락드릴게요.</p>
+
+        <form action="https://formspree.io/f/mkoknjqq" method="POST">
+          <div class="field">
+            <label for="company">회사명</label>
+            <input id="company" name="company" type="text" required />
+          </div>
+
+          <div class="field">
+            <label for="name">담당자명</label>
+            <input id="name" name="name" type="text" required />
+          </div>
+
+          <div class="field">
+            <label for="email">이메일</label>
+            <input id="email" name="email" type="email" required />
+          </div>
+
+          <div class="field">
+            <label for="phone">연락처</label>
+            <input id="phone" name="phone" type="tel" />
+          </div>
+
+          <div class="field">
+            <label for="message">문의 내용</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+
+          <input type="hidden" name="_subject" value="[제휴문의] 새 문의가 도착했습니다." />
+          <button type="submit">문의 보내기</button>
+          <div class="hint">제출 후 Formspree 설정에 따라 확인/감사 페이지로 이동합니다.</div>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

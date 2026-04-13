@@ -1,0 +1,12 @@
+{
+  "name": "vibe-animal-test",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "deploy:cf": "wrangler pages deploy . --project-name vibe-animal-test",
+    "deploy:cf:prod": "wrangler pages deploy . --project-name vibe-animal-test --branch main"
+  },
+  "devDependencies": {
+    "wrangler": "^4.82.1"
+  }
+}

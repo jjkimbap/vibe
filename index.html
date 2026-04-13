@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>동물상 테스트</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #f6f7fb;
+        color: #111827;
+      }
+      .container {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 24px 16px 40px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: 0 8px 24px rgba(17, 24, 39, 0.06);
+      }
+      .card + .card {
+        margin-top: 16px;
+      }
+      h1,
+      h2 {
+        margin: 0 0 10px;
+      }
+      p {
+        margin: 0 0 14px;
+        color: #4b5563;
+        line-height: 1.5;
+      }
+      .field {
+        margin-bottom: 10px;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      input[type="text"],
+      input[type="file"] {
+        width: 100%;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 14px;
+        background: #fff;
+      }
+      .btn {
+        border: none;
+        background: #111827;
+        color: #fff;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .preview {
+        width: 100%;
+        max-height: 320px;
+        object-fit: contain;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #fafafa;
+        margin-top: 10px;
+      }
+      .result {
+        margin-top: 14px;
+        padding: 12px;
+        border-radius: 8px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+      }
+      .result strong {
+        font-size: 17px;
+      }
+      .bars {
+        margin-top: 10px;
+      }
+      .bar-item {
+        margin-bottom: 10px;
+      }
+      .bar-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+      .bar-track {
+        width: 100%;
+        height: 10px;
+        border-radius: 999px;
+        background: #e5e7eb;
+        overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #6366f1, #22c55e);
+      }
+      .comments-frame {
+        width: 100%;
+        height: 620px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #fff;
+      }
+      .link-btn {
+        display: inline-block;
+        margin-top: 10px;
+        text-decoration: none;
+        color: #111827;
+        font-size: 14px;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <section class="card">
+        <h1>강아지상 vs 고양이상 테스트</h1>
+        <p>
+          Teachable Machine으로 학습한 모델을 불러와 얼굴 사진을 분석합니다. 업로드한 이미지가
+          강아지상/고양이상 중 어디에 더 가까운지 확률과 함께 보여줍니다.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>1) 모델 연결</h2>
+        <p>
+          Teachable Machine에서 Export한 모델 URL을 입력하세요. 기본값은 예시 경로이므로
+          본인 모델 주소로 꼭 바꿔주세요.
+        </p>
+        <div class="field">
+          <label for="modelBaseUrl">모델 기본 URL</label>
+          <input
+            id="modelBaseUrl"
+            type="text"
+            value="https://teachablemachine.withgoogle.com/models/YOUR_MODEL_ID/"
+          />
+        </div>
+        <button class="btn" id="loadModelBtn" type="button">모델 불러오기</button>
+        <p id="modelStatus">모델 상태: 아직 불러오지 않음</p>
+      </section>
+
+      <section class="card">
+        <h2>2) 동물상 테스트</h2>
+        <div class="field">
+          <label for="imageInput">얼굴 이미지 업로드</label>
+          <input id="imageInput" type="file" accept="image/*" />
+        </div>
+        <img id="previewImage" class="preview" alt="미리보기" />
+        <div style="margin-top: 12px">
+          <button class="btn" id="predictBtn" type="button" disabled>테스트 시작</button>
+        </div>
+
+        <div id="resultBox" class="result" style="display: none">
+          <strong id="resultTitle"></strong>
+          <p id="resultDesc" style="margin-top: 8px"></p>
+          <div id="probabilityBars" class="bars"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>댓글</h2>
+        <p>테스트 결과를 댓글로 공유해보세요.</p>
+        <iframe class="comments-frame" src="comments.html" title="댓글 창"></iframe>
+      </section>
+
+      <section class="card">
+        <h2>제휴 문의</h2>
+        <p>서비스 협업/제휴 문의는 아래 페이지에서 접수할 수 있습니다.</p>
+        <a class="link-btn" href="partnership.html" target="_blank" rel="noopener noreferrer"
+          >제휴 문의 페이지 열기</a
+        >
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script>
+      let model = null;
+      let maxPredictions = 0;
+      let selectedImage = null;
+
+      const modelBaseUrlInput = document.getElementById("modelBaseUrl");
+      const loadModelBtn = document.getElementById("loadModelBtn");
+      const modelStatus = document.getElementById("modelStatus");
+      const imageInput = document.getElementById("imageInput");
+      const previewImage = document.getElementById("previewImage");
+      const predictBtn = document.getElementById("predictBtn");
+      const resultBox = document.getElementById("resultBox");
+      const resultTitle = document.getElementById("resultTitle");
+      const resultDesc = document.getElementById("resultDesc");
+      const probabilityBars = document.getElementById("probabilityBars");
+
+      async function loadModel() {
+        const base = modelBaseUrlInput.value.trim();
+        if (!base) {
+          modelStatus.textContent = "모델 상태: URL을 입력해주세요.";
+          return;
+        }
+
+        const normalized = base.endsWith("/") ? base : base + "/";
+        const modelURL = normalized + "model.json";
+        const metadataURL = normalized + "metadata.json";
+
+        modelStatus.textContent = "모델 상태: 불러오는 중...";
+        predictBtn.disabled = true;
+
+        try {
+          model = await tmImage.load(modelURL, metadataURL);
+          maxPredictions = model.getTotalClasses();
+          modelStatus.textContent = "모델 상태: 불러오기 완료 (" + maxPredictions + "개 클래스)";
+          if (selectedImage) {
+            predictBtn.disabled = false;
+          }
+        } catch (error) {
+          model = null;
+          modelStatus.textContent =
+            "모델 상태: 불러오기 실패 - Teachable Machine URL을 확인해주세요.";
+          console.error(error);
+        }
+      }
+
+      function toPercent(value) {
+        return (value * 100).toFixed(1) + "%";
+      }
+
+      function getAnimalFaceMessage(label, confidence) {
+        const lower = label.toLowerCase();
+        if (lower.includes("dog") || lower.includes("강아지")) {
+          return confidence > 0.8
+            ? "활발하고 친근한 강아지상이 강하게 나타나요!"
+            : "부드럽고 친근한 강아지상 매력이 보여요.";
+        }
+        if (lower.includes("cat") || lower.includes("고양이")) {
+          return confidence > 0.8
+            ? "도도하고 세련된 고양이상이 강하게 나타나요!"
+            : "차분하고 시크한 고양이상 느낌이 있어요.";
+        }
+        return "모델 결과를 기준으로 가장 가까운 동물상입니다.";
+      }
+
+      async function predictImage() {
+        if (!model || !selectedImage) {
+          return;
+        }
+
+        const predictions = await model.predict(selectedImage, false);
+        predictions.sort(function (a, b) {
+          return b.probability - a.probability;
+        });
+
+        const best = predictions[0];
+        resultTitle.textContent =
+          "당신은 " + best.className + " 타입! (" + toPercent(best.probability) + ")";
+        resultDesc.textContent = getAnimalFaceMessage(best.className, best.probability);
+
+        probabilityBars.innerHTML = "";
+        for (let i = 0; i < Math.min(predictions.length, maxPredictions); i += 1) {
+          const item = document.createElement("div");
+          item.className = "bar-item";
+
+          const labelRow = document.createElement("div");
+          labelRow.className = "bar-label";
+          labelRow.innerHTML =
+            "<span>" +
+            predictions[i].className +
+            "</span><span>" +
+            toPercent(predictions[i].probability) +
+            "</span>";
+
+          const track = document.createElement("div");
+          track.className = "bar-track";
+          const fill = document.createElement("div");
+          fill.className = "bar-fill";
+          fill.style.width = toPercent(predictions[i].probability);
+          track.appendChild(fill);
+
+          item.appendChild(labelRow);
+          item.appendChild(track);
+          probabilityBars.appendChild(item);
+        }
+
+        resultBox.style.display = "block";
+      }
+
+      loadModelBtn.addEventListener("click", loadModel);
+
+      imageInput.addEventListener("change", function (event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) {
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          previewImage.src = e.target.result;
+          previewImage.onload = function () {
+            selectedImage = previewImage;
+            if (model) {
+              predictBtn.disabled = false;
+            }
+          };
+        };
+        reader.readAsDataURL(file);
+      });
+
+      predictBtn.addEventListener("click", predictImage);
+    </script>
+  </body>
+</html>
