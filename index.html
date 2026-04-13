@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="동물상 테스트 웹앱 - Teachable Machine 모델로 강아지상/고양이상 분석, 댓글 공유, 제휴 문의까지 한 번에."
+    />
+    <meta name="robots" content="index,follow" />
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1867290585705548"
@@ -13,35 +18,115 @@
       * {
         box-sizing: border-box;
       }
+      :root {
+        --bg: #f4f6fb;
+        --card: #ffffff;
+        --text: #111827;
+        --muted: #6b7280;
+        --line: #e5e7eb;
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+      }
       body {
         margin: 0;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background: #f6f7fb;
-        color: #111827;
+        background: var(--bg);
+        color: var(--text);
       }
       .container {
-        max-width: 860px;
+        max-width: 980px;
         margin: 0 auto;
-        padding: 24px 16px 40px;
+        padding: 18px 16px 40px;
+      }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(244, 246, 251, 0.92);
+        backdrop-filter: blur(6px);
+        border-bottom: 1px solid var(--line);
+      }
+      .topbar-inner {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        font-size: 16px;
+        font-weight: 800;
+      }
+      .nav {
+        display: flex;
+        gap: 10px;
+      }
+      .nav a {
+        text-decoration: none;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .nav a:hover {
+        color: var(--text);
+      }
+      .hero {
+        background: linear-gradient(135deg, #dbeafe, #eff6ff 60%, #ffffff);
+        border: 1px solid #bfdbfe;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 14px;
+      }
+      .hero h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+      }
+      .hero p {
+        margin: 0;
+        color: #374151;
+        line-height: 1.55;
+      }
+      .quick-actions {
+        margin-top: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .quick-actions a {
+        text-decoration: none;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 8px 12px;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 700;
       }
       .card {
-        background: #fff;
-        border: 1px solid #e5e7eb;
+        background: var(--card);
+        border: 1px solid var(--line);
         border-radius: 14px;
-        padding: 20px;
-        box-shadow: 0 8px 24px rgba(17, 24, 39, 0.06);
+        padding: 18px;
+        box-shadow: 0 8px 20px rgba(17, 24, 39, 0.05);
       }
       .card + .card {
-        margin-top: 16px;
+        margin-top: 12px;
       }
       h1,
       h2 {
-        margin: 0 0 10px;
+        margin: 0 0 8px;
       }
       p {
-        margin: 0 0 14px;
-        color: #4b5563;
+        margin: 0 0 12px;
+        color: var(--muted);
         line-height: 1.5;
+      }
+      .step {
+        font-size: 12px;
+        color: #1d4ed8;
+        font-weight: 800;
+        letter-spacing: 0.02em;
       }
       .field {
         margin-bottom: 10px;
@@ -55,7 +140,7 @@
       input[type="text"],
       input[type="file"] {
         width: 100%;
-        border: 1px solid #d1d5db;
+        border: 1px solid var(--line);
         border-radius: 8px;
         padding: 10px 12px;
         font-size: 14px;
@@ -63,7 +148,7 @@
       }
       .btn {
         border: none;
-        background: #111827;
+        background: var(--primary);
         color: #fff;
         border-radius: 8px;
         padding: 10px 14px;
@@ -75,13 +160,21 @@
         opacity: 0.5;
         cursor: not-allowed;
       }
+      .btn:hover:not(:disabled) {
+        background: var(--primary-dark);
+      }
+      .btn-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
       .preview {
         width: 100%;
         max-height: 320px;
         object-fit: contain;
-        border: 1px solid #e5e7eb;
+        border: 1px solid var(--line);
         border-radius: 8px;
-        background: #fafafa;
+        background: #f9fafb;
         margin-top: 10px;
       }
       .result {
@@ -93,6 +186,41 @@
       }
       .result strong {
         font-size: 17px;
+      }
+      .loading-box {
+        margin-top: 14px;
+        padding: 12px;
+        border-radius: 8px;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+      }
+      .loading-text {
+        margin: 0 0 8px;
+        font-size: 13px;
+        color: #1e3a8a;
+        font-weight: 700;
+      }
+      .loading-track {
+        width: 100%;
+        height: 8px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: #dbeafe;
+      }
+      .loading-fill {
+        width: 30%;
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #2563eb, #60a5fa);
+        animation: loadingSlide 1.1s ease-in-out infinite;
+      }
+      @keyframes loadingSlide {
+        0% {
+          transform: translateX(-120%);
+        }
+        100% {
+          transform: translateX(340%);
+        }
       }
       .bars {
         margin-top: 10px;
@@ -115,91 +243,88 @@
       }
       .bar-fill {
         height: 100%;
-        background: linear-gradient(90deg, #6366f1, #22c55e);
+        background: linear-gradient(90deg, #2563eb, #16a34a);
       }
       .comments-frame {
         width: 100%;
-        height: 620px;
-        border: 1px solid #e5e7eb;
+        height: 560px;
+        border: 1px solid var(--line);
         border-radius: 8px;
         background: #fff;
       }
       .link-btn {
         display: inline-block;
-        margin-top: 10px;
+        margin-top: 2px;
         text-decoration: none;
-        color: #111827;
+        color: var(--text);
         font-size: 14px;
         font-weight: 700;
       }
-      .webcam-box {
-        margin-top: 12px;
+      .footer {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted);
       }
-      .webcam-box canvas {
-        width: 260px;
-        max-width: 100%;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        background: #fafafa;
+      .footer a {
+        color: #4b5563;
+        text-decoration: none;
+        margin: 0 6px;
       }
     </style>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "동물상 테스트",
+        "applicationCategory": "EntertainmentApplication",
+        "operatingSystem": "Web",
+        "description": "Teachable Machine 모델로 강아지상/고양이상 테스트를 제공하는 웹앱"
+      }
+    </script>
   </head>
   <body>
-    <header class="container" style="padding-bottom: 0">
-      <section class="card">
-        <h1 style="margin-bottom: 12px">동물상 테스트</h1>
-        <p style="margin-bottom: 10px">
-          얼굴 이미지 또는 웹캠으로 강아지상/고양이상 예측을 체험하는 서비스입니다.
-        </p>
-        <p style="margin-bottom: 0">
-          <a class="link-btn" href="about.html">서비스 소개</a> ·
-          <a class="link-btn" href="editorial-policy.html">콘텐츠 운영 원칙</a> ·
-          <a class="link-btn" href="privacy.html">개인정보처리방침</a> ·
-          <a class="link-btn" href="partnership.html">문의하기</a>
-        </p>
-      </section>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">동물상 테스트</div>
+        <nav class="nav">
+          <a href="#animal-test">테스트</a>
+          <a href="#comments">댓글</a>
+          <a href="#partnership">제휴 문의</a>
+        </nav>
+      </div>
     </header>
+
     <main class="container">
-      <section class="card">
-        <h1>강아지상 vs 고양이상 테스트</h1>
+      <section class="hero">
+        <h1>강아지상 vs 고양이상, 1분 테스트</h1>
         <p>
-          Teachable Machine으로 학습한 모델을 불러와 얼굴 사진을 분석합니다. 업로드한 이미지가
-          강아지상/고양이상 중 어디에 더 가까운지 확률과 함께 보여줍니다.
+          얼굴 사진 업로드로 바로 분석해보세요. 결과는 실시간 확률로 표시되며, 댓글로 테스트 경험을
+          공유할 수 있습니다.
         </p>
-        <p>
-          본 테스트는 오락/참고용 서비스이며, 인물의 성격이나 능력을 단정하지 않습니다. 결과는
-          모델 학습 데이터 특성과 촬영 환경에 따라 달라질 수 있습니다.
-        </p>
-      </section>
-
-      <section class="card">
-        <h2>1) 모델 연결</h2>
-        <p>
-          Teachable Machine에서 Export한 모델 URL을 입력하세요. 기본값은 예시 경로이므로
-          본인 모델 주소로 꼭 바꿔주세요.
-        </p>
-        <div class="field">
-          <label for="modelBaseUrl">모델 기본 URL</label>
-          <input
-            id="modelBaseUrl"
-            type="text"
-            value="./my_model/"
-          />
+        <div class="quick-actions">
+          <a href="#animal-test">바로 테스트하기</a>
+          <a href="#comments">댓글 확인하기</a>
+          <a href="#partnership">제휴 문의하기</a>
         </div>
-        <button class="btn" id="loadModelBtn" type="button">모델 불러오기</button>
-        <p id="modelStatus">모델 상태: 아직 불러오지 않음</p>
       </section>
 
-      <section class="card">
-        <h2>2) 동물상 테스트</h2>
+      <section id="animal-test" class="card">
+        <h2>동물상 테스트</h2>
         <div class="field">
-          <label for="imageInput">얼굴 이미지 업로드</label>
+          <label for="imageInput">얼굴 이미지 업로드 (정면 권장)</label>
           <input id="imageInput" type="file" accept="image/*" />
         </div>
-        <img id="previewImage" class="preview" alt="미리보기" />
-        <div style="margin-top: 12px">
+        <img id="previewImage" class="preview" alt="미리보기" style="display: none" />
+        <div class="btn-row" style="margin-top: 12px">
           <button class="btn" id="predictBtn" type="button" disabled>테스트 시작</button>
-          <button class="btn" id="startWebcamBtn" type="button" disabled>웹캠 시작</button>
+        </div>
+
+        <div id="loadingBox" class="loading-box" style="display: none">
+          <p class="loading-text">AI가 이미지를 분석하는 중입니다...</p>
+          <div class="loading-track">
+            <div class="loading-fill"></div>
+          </div>
         </div>
 
         <div id="resultBox" class="result" style="display: none">
@@ -207,18 +332,16 @@
           <p id="resultDesc" style="margin-top: 8px"></p>
           <div id="probabilityBars" class="bars"></div>
         </div>
-        <div class="webcam-box">
-          <div id="webcam-container"></div>
-        </div>
+        <p style="margin-top: 10px; font-size: 12px">
+          결과는 오락/참고용입니다. 촬영 환경, 각도, 조명에 따라 달라질 수 있습니다.
+        </p>
       </section>
 
-      <section class="card">
-        <h2>댓글</h2>
-        <p>테스트 결과를 댓글로 공유해보세요.</p>
+      <section id="comments" class="card">
         <iframe class="comments-frame" src="comments.html" title="댓글 창"></iframe>
       </section>
 
-      <section class="card">
+      <section id="partnership" class="card">
         <h2>제휴 문의</h2>
         <p>서비스 협업/제휴 문의는 아래 페이지에서 접수할 수 있습니다.</p>
         <a class="link-btn" href="partnership.html" target="_blank" rel="noopener noreferrer"
@@ -226,18 +349,12 @@
         >
       </section>
 
-      <section class="card">
-        <h2>서비스 신뢰 정보</h2>
-        <p>
-          본 사이트는 독자적인 설명 콘텐츠와 테스트 기능을 제공하며, 사용자가 쉽게 운영자 정보와
-          정책 문서를 확인할 수 있도록 구성했습니다.
-        </p>
-        <p>
-          - 운영자/서비스 소개: <a class="link-btn" href="about.html">about.html</a><br />
-          - 개인정보 안내: <a class="link-btn" href="privacy.html">privacy.html</a><br />
-          - 콘텐츠 제작 원칙: <a class="link-btn" href="editorial-policy.html">editorial-policy.html</a>
-        </p>
-      </section>
+      <footer class="footer">
+        <a href="about.html">서비스 소개</a>
+        <a href="privacy.html">개인정보처리방침</a>
+        <a href="editorial-policy.html">콘텐츠 운영 원칙</a>
+        <a href="partnership.html">문의하기</a>
+      </footer>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
@@ -246,48 +363,31 @@
       let model = null;
       let maxPredictions = 0;
       let selectedImage = null;
-      let webcam = null;
-      let isWebcamRunning = false;
+      const URL = "https://teachablemachine.withgoogle.com/models/WVnGWc7EP/";
 
-      const modelBaseUrlInput = document.getElementById("modelBaseUrl");
-      const loadModelBtn = document.getElementById("loadModelBtn");
-      const modelStatus = document.getElementById("modelStatus");
       const imageInput = document.getElementById("imageInput");
       const previewImage = document.getElementById("previewImage");
       const predictBtn = document.getElementById("predictBtn");
-      const startWebcamBtn = document.getElementById("startWebcamBtn");
-      const webcamContainer = document.getElementById("webcam-container");
+      const loadingBox = document.getElementById("loadingBox");
       const resultBox = document.getElementById("resultBox");
       const resultTitle = document.getElementById("resultTitle");
       const resultDesc = document.getElementById("resultDesc");
       const probabilityBars = document.getElementById("probabilityBars");
 
-      async function loadModel() {
-        const base = modelBaseUrlInput.value.trim();
-        if (!base) {
-          modelStatus.textContent = "모델 상태: URL을 입력해주세요.";
-          return;
-        }
+      async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
 
-        const normalized = base.endsWith("/") ? base : base + "/";
-        const modelURL = normalized + "model.json";
-        const metadataURL = normalized + "metadata.json";
-
-        modelStatus.textContent = "모델 상태: 불러오는 중...";
         predictBtn.disabled = true;
 
         try {
           model = await tmImage.load(modelURL, metadataURL);
           maxPredictions = model.getTotalClasses();
-          modelStatus.textContent = "모델 상태: 불러오기 완료 (" + maxPredictions + "개 클래스)";
-          startWebcamBtn.disabled = false;
           if (selectedImage) {
             predictBtn.disabled = false;
           }
         } catch (error) {
           model = null;
-          modelStatus.textContent =
-            "모델 상태: 불러오기 실패 - Teachable Machine URL을 확인해주세요.";
           console.error(error);
         }
       }
@@ -316,8 +416,17 @@
           return;
         }
 
-        const predictions = await model.predict(selectedImage, false);
-        renderPredictions(predictions);
+        predictBtn.disabled = true;
+        resultBox.style.display = "none";
+        loadingBox.style.display = "block";
+
+        try {
+          const predictions = await model.predict(selectedImage, false);
+          renderPredictions(predictions);
+        } finally {
+          loadingBox.style.display = "none";
+          predictBtn.disabled = false;
+        }
       }
 
       function renderPredictions(predictions) {
@@ -359,46 +468,11 @@
         resultBox.style.display = "block";
       }
 
-      async function loop() {
-        if (!isWebcamRunning || !webcam || !model) {
-          return;
-        }
-        webcam.update();
-        const prediction = await model.predict(webcam.canvas, false);
-        renderPredictions(prediction);
-        window.requestAnimationFrame(loop);
-      }
-
-      async function initWebcam() {
-        if (!model) {
-          modelStatus.textContent = "모델 상태: 먼저 모델을 불러와주세요.";
-          return;
-        }
-        if (isWebcamRunning) {
-          return;
-        }
-
-        try {
-          const flip = true;
-          webcam = new tmImage.Webcam(260, 260, flip);
-          await webcam.setup();
-          await webcam.play();
-          webcamContainer.innerHTML = "";
-          webcamContainer.appendChild(webcam.canvas);
-          isWebcamRunning = true;
-          loop();
-        } catch (error) {
-          console.error(error);
-          modelStatus.textContent = "모델 상태: 웹캠 권한을 허용해주세요.";
-        }
-      }
-
-      loadModelBtn.addEventListener("click", loadModel);
-      startWebcamBtn.addEventListener("click", initWebcam);
-
       imageInput.addEventListener("change", function (event) {
         const file = event.target.files && event.target.files[0];
         if (!file) {
+          previewImage.src = "";
+          previewImage.style.display = "none";
           return;
         }
 
@@ -406,6 +480,7 @@
         reader.onload = function (e) {
           previewImage.src = e.target.result;
           previewImage.onload = function () {
+            previewImage.style.display = "block";
             selectedImage = previewImage;
             if (model) {
               predictBtn.disabled = false;
@@ -416,6 +491,7 @@
       });
 
       predictBtn.addEventListener("click", predictImage);
+      init();
     </script>
   </body>
 </html>
