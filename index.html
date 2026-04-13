@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1867290585705548"
+      crossorigin="anonymous"
+    ></script>
     <title>동물상 테스트</title>
     <style>
       * {
@@ -127,6 +132,16 @@
         font-size: 14px;
         font-weight: 700;
       }
+      .webcam-box {
+        margin-top: 12px;
+      }
+      .webcam-box canvas {
+        width: 260px;
+        max-width: 100%;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #fafafa;
+      }
     </style>
   </head>
   <body>
@@ -150,7 +165,7 @@
           <input
             id="modelBaseUrl"
             type="text"
-            value="https://teachablemachine.withgoogle.com/models/YOUR_MODEL_ID/"
+            value="./my_model/"
           />
         </div>
         <button class="btn" id="loadModelBtn" type="button">모델 불러오기</button>
@@ -166,12 +181,16 @@
         <img id="previewImage" class="preview" alt="미리보기" />
         <div style="margin-top: 12px">
           <button class="btn" id="predictBtn" type="button" disabled>테스트 시작</button>
+          <button class="btn" id="startWebcamBtn" type="button" disabled>웹캠 시작</button>
         </div>
 
         <div id="resultBox" class="result" style="display: none">
           <strong id="resultTitle"></strong>
           <p id="resultDesc" style="margin-top: 8px"></p>
           <div id="probabilityBars" class="bars"></div>
+        </div>
+        <div class="webcam-box">
+          <div id="webcam-container"></div>
         </div>
       </section>
 
@@ -196,6 +215,8 @@
       let model = null;
       let maxPredictions = 0;
       let selectedImage = null;
+      let webcam = null;
+      let isWebcamRunning = false;
 
       const modelBaseUrlInput = document.getElementById("modelBaseUrl");
       const loadModelBtn = document.getElementById("loadModelBtn");
@@ -203,6 +224,8 @@
       const imageInput = document.getElementById("imageInput");
       const previewImage = document.getElementById("previewImage");
       const predictBtn = document.getElementById("predictBtn");
+      const startWebcamBtn = document.getElementById("startWebcamBtn");
+      const webcamContainer = document.getElementById("webcam-container");
       const resultBox = document.getElementById("resultBox");
       const resultTitle = document.getElementById("resultTitle");
       const resultDesc = document.getElementById("resultDesc");
@@ -226,6 +249,7 @@
           model = await tmImage.load(modelURL, metadataURL);
           maxPredictions = model.getTotalClasses();
           modelStatus.textContent = "모델 상태: 불러오기 완료 (" + maxPredictions + "개 클래스)";
+          startWebcamBtn.disabled = false;
           if (selectedImage) {
             predictBtn.disabled = false;
           }
@@ -262,6 +286,10 @@
         }
 
         const predictions = await model.predict(selectedImage, false);
+        renderPredictions(predictions);
+      }
+
+      function renderPredictions(predictions) {
         predictions.sort(function (a, b) {
           return b.probability - a.probability;
         });
@@ -300,7 +328,42 @@
         resultBox.style.display = "block";
       }
 
+      async function loop() {
+        if (!isWebcamRunning || !webcam || !model) {
+          return;
+        }
+        webcam.update();
+        const prediction = await model.predict(webcam.canvas, false);
+        renderPredictions(prediction);
+        window.requestAnimationFrame(loop);
+      }
+
+      async function initWebcam() {
+        if (!model) {
+          modelStatus.textContent = "모델 상태: 먼저 모델을 불러와주세요.";
+          return;
+        }
+        if (isWebcamRunning) {
+          return;
+        }
+
+        try {
+          const flip = true;
+          webcam = new tmImage.Webcam(260, 260, flip);
+          await webcam.setup();
+          await webcam.play();
+          webcamContainer.innerHTML = "";
+          webcamContainer.appendChild(webcam.canvas);
+          isWebcamRunning = true;
+          loop();
+        } catch (error) {
+          console.error(error);
+          modelStatus.textContent = "모델 상태: 웹캠 권한을 허용해주세요.";
+        }
+      }
+
       loadModelBtn.addEventListener("click", loadModel);
+      startWebcamBtn.addEventListener("click", initWebcam);
 
       imageInput.addEventListener("change", function (event) {
         const file = event.target.files && event.target.files[0];
